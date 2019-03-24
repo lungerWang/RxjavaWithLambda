@@ -16,6 +16,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
+import io.reactivex.SingleObserver;
 import io.reactivex.SingleOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -27,6 +28,7 @@ import io.reactivex.functions.Function;
 public class MainActivity extends AppCompatActivity {
 
     TextView textView;
+    private Disposable mSubscribeInterval;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,9 +110,33 @@ public class MainActivity extends AppCompatActivity {
 //                .subscribe(i -> Log.d("wbl", "result = " + i));
 
         //interval 心跳
-//        Observable.interval(3, 1, TimeUnit.SECONDS)
+//        mSubscribeInterval = Observable.interval(3, 1, TimeUnit.SECONDS)
 //                .observeOn(AndroidSchedulers.mainThread())
 //                .subscribe(time -> textView.setText(String.valueOf(time)));
+
+        //Single never 只会调用onSubscribe 不发射任何信号
+//        Single.never()
+//                .subscribe(o-> Log.d("wbl", o.toString()),
+//                        e -> e.printStackTrace());
+
+//        Single.never()
+//                .subscribe(new SingleObserver<Object>() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//                        Log.d("wbl", "onSubscribe");
+//                    }
+//
+//                    @Override
+//                    public void onSuccess(Object o) {
+//                        Log.d("wbl", "onSuccess" + o.toString());
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        Log.d("wbl", "Throwable");
+//                    }
+//                });
+
     }
 
     private Observable<String> getStringObservable() {
@@ -125,4 +151,11 @@ public class MainActivity extends AppCompatActivity {
         return Observable.just("a", "b", "c");
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mSubscribeInterval != null){
+            mSubscribeInterval.dispose();
+        }
+    }
 }
