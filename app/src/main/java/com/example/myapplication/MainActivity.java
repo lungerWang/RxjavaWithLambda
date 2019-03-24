@@ -7,12 +7,14 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableSource;
 import io.reactivex.Observable;
 import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
@@ -108,11 +110,12 @@ public class MainActivity extends AppCompatActivity {
 //                .doOnNext(s -> Log.d("wbl", "存储 - " + s))
 //                .subscribe(s -> Log.d("wbl", "消费 - " + s));
 
-        //filter
-//        Observable.just(100, 25, 300, 44, 125, 9, 321, 550, 666)
+        //filter skip take distinct
+//        Observable.just(100, 25, 300, 44, 125, 9, 321, 321, 550, 666)
 //                .skip(1) //跳过了100
 //                .filter(i -> i >= 100) //过滤掉了低于100的值
 //                .take(4)//只要最后结果的前4个
+//                .distinct()
 //                .subscribe(i -> Log.d("wbl", "result = " + i));
 
         //interval 心跳
@@ -173,6 +176,12 @@ public class MainActivity extends AppCompatActivity {
 //                Log.d("wbl", "onError = " + e.getMessage());
 //            }
 //        });
+        //defer  可被延迟反复调用
+//        Observable<String> deferObservable = Observable.defer(() -> Observable.just("good job"));
+//        deferObservable.subscribe(s -> Log.d("wbl", s));
+//        deferObservable.subscribe(s -> Log.d("wbl", s));
+//        deferObservable.subscribe(s -> Log.d("wbl", s));
+
 
     }
 
