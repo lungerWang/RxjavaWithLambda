@@ -29,10 +29,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //create 写法1
-//        Observable.create((ObservableOnSubscribe<Integer>)  emitter -> {
+//        Observable.create((ObservableOnSubscribe<Integer>)emitter -> {
 //            emitter.onNext(101);
 //            emitter.onNext(222);
-//            emitter.onError(new RuntimeException("nimabi"));
+//            emitter.onError(new RuntimeException("oh, error"));
 //            emitter.onComplete();
 //        }).subscribe(new Observer<Integer>() {
 //            @Override
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 //            emitter.onComplete();
 //        }).subscribe(number -> Log.d("wbl", "accept " + number),
 //                throwable -> Log.d("wbl", "onError" + throwable.getMessage()),
-//                () -> Log.d("wbl", "onComplete"),
+//                () -> Log.d("wbl", "onComplete")
 //        );
 
         //zip
@@ -94,6 +94,14 @@ public class MainActivity extends AppCompatActivity {
 //        Observable.just("13")
 //                .doOnNext(s -> Log.d("wbl", "存储 - " + s))
 //                .subscribe(s -> Log.d("wbl", "消费 - " + s));
+
+        //filter
+//        Observable.just(100, 25, 300, 44, 125, 9, 321, 550, 666)
+//                .skip(1) //跳过了100
+//                .filter(i -> i >= 100) //过滤掉了低于100的值
+//                .take(4)//只要最后结果的前4个
+//                .subscribe(i -> Log.d("wbl", "result = " + i));
+
     }
 
     private Observable<String> getStringObservable(){
