@@ -21,9 +21,11 @@ import io.reactivex.SingleOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
+import io.reactivex.functions.BiConsumer;
 import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.plugins.RxJavaPlugins;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         textView = findViewById(R.id.textView);
+        // add a default error handler for safe using RxJava, crashing APP is always unacceptable!!!
+        RxJavaPlugins.setErrorHandler(t ->
+                Log.d("wbl", "an unpredictable throwable when using RxJava, \n throwable = "
+                        + t.getMessage()));
         //create 写法1
 //        Observable.create((ObservableOnSubscribe<Integer>)emitter -> {
 //            emitter.onNext(101);
@@ -136,6 +142,37 @@ public class MainActivity extends AppCompatActivity {
 //                        Log.d("wbl", "Throwable");
 //                    }
 //                });
+        //实验结果说明 Single如果emitter发射多个，都会生效
+//        Single.create(emitter -> {
+//            emitter.onSuccess("恭喜发财!");
+//            emitter.onError(new RuntimeException("we do not like you bug"));
+//        }).subscribe((result, throwable) -> {
+//            Log.d("wbl", "result = " + result);
+//            if (throwable != null) {
+//                Log.d("wbl", "error = " + throwable.getMessage());
+//            }
+//        });
+//        Single.create((SingleOnSubscribe<String>) emitter -> {
+//            //emitter.onSuccess("恭喜发财!");
+//            int a = 1/0;
+//            //emitter.onError(new Exception("we do not like you bug"));
+//
+//        }).subscribe(new SingleObserver<String>() {
+//            @Override
+//            public void onSubscribe(Disposable d) {
+//                Log.d("wbl", "onSubscribe");
+//            }
+//
+//            @Override
+//            public void onSuccess(String s) {
+//                Log.d("wbl", "onSuccess = " + s);
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//                Log.d("wbl", "onError = " + e.getMessage());
+//            }
+//        });
 
     }
 
@@ -154,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mSubscribeInterval != null){
+        if (mSubscribeInterval != null) {
             mSubscribeInterval.dispose();
         }
     }
