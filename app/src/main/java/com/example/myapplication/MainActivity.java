@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import io.reactivex.Observer;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 import io.reactivex.SingleOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.functions.BiFunction;
@@ -24,10 +26,13 @@ import io.reactivex.functions.Function;
 
 public class MainActivity extends AppCompatActivity {
 
+    TextView textView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        textView = findViewById(R.id.textView);
         //create 写法1
 //        Observable.create((ObservableOnSubscribe<Integer>)emitter -> {
 //            emitter.onNext(101);
@@ -102,17 +107,21 @@ public class MainActivity extends AppCompatActivity {
 //                .take(4)//只要最后结果的前4个
 //                .subscribe(i -> Log.d("wbl", "result = " + i));
 
+        //interval 心跳
+//        Observable.interval(3, 1, TimeUnit.SECONDS)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(time -> textView.setText(String.valueOf(time)));
     }
 
-    private Observable<String> getStringObservable(){
+    private Observable<String> getStringObservable() {
         return Observable.just("kangkang", "rose", "kat");
     }
 
-    private Observable<Integer> getIntegerObservable(){
+    private Observable<Integer> getIntegerObservable() {
         return Observable.just(1, 2, 3, 4, 5);
     }
 
-    private Observable<String> getStringObservable2(){
+    private Observable<String> getStringObservable2() {
         return Observable.just("a", "b", "c");
     }
 
